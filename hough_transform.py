@@ -53,56 +53,64 @@ def build_line(shape, m, b, val = 99):
 	return im
 
 
-M_MAX = 2
-B_COEFF = 1
+def run():
+	M_MAX = 2
+	B_COEFF = 1
 
-im = np.zeros((100, 100))
-feature_space = np.zeros((200, 200)) # d, theta
+	im = np.zeros((100, 100))
+	feature_space = np.zeros((200, 200)) # d, theta
 
-points = [(10, 10), (20, 20), (30,30), (40, 40), (50, 50), (40, 32), (12, 76), (5, 5), (50, 10), (55, 15), (60, 20), (70, 30)]
+	points = [(10, 10), (20, 20), (30,30), (40, 40), (50, 50), (40, 32), (12, 76), (5, 5), (50, 10), (55, 15), (60, 20), (70, 30)]
 
-points1 = [(10, 10), (20, 20), (30,30), (40, 40)]
-points2 = [(10, 10), (15, 20), (20,30), (25, 40)]
-points3 = [(50, 10), (60, 20), (70,30), (80, 40)]
+	points1 = [(10, 10), (20, 20), (30,30), (40, 40)]
+	points2 = [(10, 10), (15, 20), (20,30), (25, 40)]
+	points3 = [(50, 10), (60, 20), (70,30), (80, 40)]
 
-points4 = [(1,1), (10, 50)]
-
-
-
-#points = [(10, 40), (50, 77), (33, 80), (40, 75), (90, 70)]
-
-for p in points[:]:
-	im[p[0], p[1]] = 1
-	feature_space = add_to_fetaure_space_linear(p, feature_space, M_MAX = M_MAX, B_COEFF = B_COEFF)
+	points4 = [(1,1), (10, 50)]
 
 
-#best_matches = feature_space == feature_space.max()
 
-val_set = list(set(feature_space.flatten()))
+	#points = [(10, 40), (50, 77), (33, 80), (40, 75), (90, 70)]
 
-print val_set
+	for p in points[:]:
+		im[p[0], p[1]] = 1
+		feature_space = add_to_fetaure_space_linear(p, feature_space, M_MAX = M_MAX, B_COEFF = B_COEFF)
 
-candidates = get_coordinates(feature_space, val_set[-1])
 
-proposal = np.array(im)
+	#best_matches = feature_space == feature_space.max()
 
-for p in candidates:
-	print "candidate:", p
-	m, b = space_point_to_line(p, feature_space, M_MAX = M_MAX, B_COEFF = B_COEFF)
+	val_set = list(set(feature_space.flatten()))
 
-	line = build_line(proposal.shape, m, b, val = 3)
-	proposal += line
+	candidates = []
+
+	candidates += get_coordinates(feature_space, val_set[-1])
+	candidates += get_coordinates(feature_space, val_set[-2])
 
 
 
 
-plt.subplot(1,3,1)
-plt.imshow(im, interpolation="none")
-plt.subplot(1,3,2)
-plt.imshow(feature_space.T, interpolation="none")
-plt.subplot(1,3,3)
-plt.imshow(proposal, interpolation="none")
+	proposal = np.array(im)
+
+	for p in candidates:
+		print "candidate:", p
+		m, b = space_point_to_line(p, feature_space, M_MAX = M_MAX, B_COEFF = B_COEFF)
+
+		line = build_line(proposal.shape, m, b, val = 3)
+		proposal += line
 
 
-plt.show()
 
+
+	plt.subplot(1,3,1)
+	plt.imshow(im, interpolation="none")
+	plt.subplot(1,3,2)
+	plt.imshow(feature_space.T, interpolation="none")
+	plt.subplot(1,3,3)
+	plt.imshow(proposal, interpolation="none")
+
+
+	plt.show()
+
+
+if __name__ == "__main__":
+	run()
