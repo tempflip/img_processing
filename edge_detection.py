@@ -14,9 +14,9 @@ def gaussian_dist(m, sigma, size):
 	dist = np.array([[pdf(x) * pdf(y) for x in linspace] for y in linspace])
 	return dist
 
-img = np.array(misc.imresize(misc.imread('car_view1.jpg', mode = 'L'), (400, 500)), dtype="float32")
+img = np.array(misc.imresize(misc.imread('solidYellowCurve2.jpg', mode = 'L'), (400, 500)), dtype="float32")
 img = img / img.max()
-img = img - img.max()/2
+#img = img - img.max()/2
 
 
 
@@ -43,24 +43,25 @@ kernel_prewitt = np.array([
 my_kernel1 = kernel_sobel
 
 g = gaussian_dist(0, 5, 3)
-my_kernel2 = signal.correlate(g, kernel_sobel)
+kernel = signal.correlate(g, kernel_sobel)
 
+
+
+out = np.sqrt(signal.correlate(img, kernel) ** 2 + signal.correlate(img, kernel.T) ** 2)
+misc.imsave("edge1.png", out)
+
+#plt.imshow(out)
+
+"""
 g = gaussian_dist(0, 5, 10)
 my_kernel3 = signal.correlate(g, kernel_sobel)
 
 g = gaussian_dist(0, 5, 15)
 my_kernel4 = signal.correlate(g, kernel_sobel)
 
-"""
-plt.subplot(2,1,1)
-plt.imshow(g, interpolation="none")
 
-plt.subplot(2,1,2)
-plt.imshow(my_kernel, interpolation="none")
-plt.show()
 
-exit()
-"""
+
 
 out1 = np.sqrt(signal.correlate(img, my_kernel1)**2 + signal.correlate(img, my_kernel1.T)**2)
 out2 = np.sqrt(signal.correlate(img, my_kernel2)**2 + signal.correlate(img, my_kernel2.T)**2)
@@ -78,8 +79,8 @@ plt.subplot(4,1,3)
 plt.imshow(out3, interpolation="none")
 plt.subplot(4,1,4)
 plt.imshow(out4, interpolation="none")
-
-plt.show()
+"""
+#plt.show()
 
 
 
