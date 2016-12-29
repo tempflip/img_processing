@@ -7,7 +7,7 @@ pdf = stats.norm(0, 10).pdf
 
 print pdf
 
-lin = np.linspace(-5, 5, 100)
+lin = np.linspace(-10, 10, 10)
 
 a = np.array([[pdf(x) * pdf(y) for x in lin] for y in lin])
 

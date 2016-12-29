@@ -14,7 +14,7 @@ def gaussian_dist(m, sigma, size):
 	dist = np.array([[pdf(x) * pdf(y) for x in linspace] for y in linspace])
 	return dist
 
-img = np.array(misc.imresize(misc.imread('solidYellowCurve2.jpg', mode = 'L'), (400, 500)), dtype="float32")
+img = np.array(misc.imresize(misc.imread('solidYellowCurve2.jpg', mode = 'L'), (500, 600)), dtype="float32")
 img = img / img.max()
 #img = img - img.max()/2
 
@@ -38,6 +38,23 @@ kernel_prewitt = np.array([
 	[-1, 0, 1]
 	])
 
+
+uni_blur = np.ones((5,5))
+g1 = gaussian_dist(0, 5, 5)
+g2 = gaussian_dist(0, 10, 10)
+g3 = gaussian_dist(0, 20, 20)
+
+
+
+plt.subplot(1,3,1)
+plt.imshow(g1, interpolation="none")
+plt.subplot(1,3,2)
+plt.imshow(g2, interpolation="none")
+plt.subplot(1,3,3)
+plt.imshow(g3, interpolation="none")
+
+plt.show()
+exit()
 
 
 my_kernel1 = kernel_sobel
