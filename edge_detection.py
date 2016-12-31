@@ -15,6 +15,7 @@ def gaussian_dist(m, sigma, size):
 	return dist
 
 img = np.array(misc.imresize(misc.imread('solidYellowCurve2.jpg', mode = 'L'), (500, 600)), dtype="float32")
+#img = np.array(misc.imresize(misc.imread('cat3.jpg', mode = 'L'), (500, 600)), dtype="float32")
 img = img / img.max()
 #img = img - img.max()/2
 
@@ -39,6 +40,8 @@ kernel_prewitt = np.array([
 	])
 
 
+
+"""
 uni_blur = np.ones((5,5))
 g1 = gaussian_dist(0, 5, 5)
 g2 = gaussian_dist(0, 10, 10)
@@ -55,7 +58,7 @@ plt.imshow(g3, interpolation="none")
 
 plt.show()
 exit()
-
+"""
 
 my_kernel1 = kernel_sobel
 
@@ -69,7 +72,6 @@ misc.imsave("edge1.png", out)
 
 #plt.imshow(out)
 
-"""
 g = gaussian_dist(0, 5, 10)
 my_kernel3 = signal.correlate(g, kernel_sobel)
 
@@ -80,16 +82,24 @@ my_kernel4 = signal.correlate(g, kernel_sobel)
 
 
 
-out1 = np.sqrt(signal.correlate(img, my_kernel1)**2 + signal.correlate(img, my_kernel1.T)**2)
-out2 = np.sqrt(signal.correlate(img, my_kernel2)**2 + signal.correlate(img, my_kernel2.T)**2)
-out3 = np.sqrt(signal.correlate(img, my_kernel3)**2 + signal.correlate(img, my_kernel3.T)**2)
-out4 = np.sqrt(signal.correlate(img, my_kernel4)**2 + signal.correlate(img, my_kernel4.T)**2)
+edges = np.sqrt(signal.correlate(img, my_kernel3)**2 + signal.correlate(img, my_kernel3.T)**2)
+#out2 = np.sqrt(signal.correlate(img, my_kernel2)**2 + signal.correlate(img, my_kernel2.T)**2)
+#out3 = np.sqrt(signal.correlate(img, my_kernel3)**2 + signal.correlate(img, my_kernel3.T)**2)
+#out4 = np.sqrt(signal.correlate(img, my_kernel4)**2 + signal.correlate(img, my_kernel4.T)**2)
+
+vertical_edges = signal.correlate(img, kernel_prewitt)
+horizontal_edges = signal.correlate(img, kernel_prewitt.T)
 
 
 
+plt.subplot(1,1,1)
+plt.imshow(edges, interpolation="none")
+plt.show()
 
-plt.subplot(4,1,1)
-plt.imshow(out1, interpolation="none")
+
+plt.subplot(1,2,2)
+plt.imshow(ver, interpolation="none")
+"""
 plt.subplot(4,1,2)
 plt.imshow(out2, interpolation="none")
 plt.subplot(4,1,3)
@@ -97,12 +107,10 @@ plt.imshow(out3, interpolation="none")
 plt.subplot(4,1,4)
 plt.imshow(out4, interpolation="none")
 """
-#plt.show()
+plt.show()
 
 
 
-
-exit()
 
 
 

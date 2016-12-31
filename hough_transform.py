@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from math import *
 
+# this is cartesian
 def add_to_fetaure_space_linear(p, feature_space, M_MAX = 20, B_COEFF = 0.1):
 	#### drawing the y = mx + b point represantation in the fateure space
 
@@ -27,6 +28,60 @@ def add_to_fetaure_space_linear(p, feature_space, M_MAX = 20, B_COEFF = 0.1):
 
 	return feature_space
 
+def get_hough_space_from_image(img, shape = (100, 300), val = 1):
+	hough_space = np.zeros(shape)
+	for i, row in enumerate(img):
+		for j, pixel in enumerate(row):
+			if pixel != val : continue
+			hough_space = add_to_hough_space_polar((i,j), hough_space)
+	return hough_space
+
+
+def add_to_hough_space_polar(p, feature_space):
+	space = np.linspace(0, pi, len(feature_space))
+	d_max = len(feature_space[0]) / 2
+
+	for i in range(len(space)):
+		theta = space[i]
+		d = int(p[0] * sin(theta) + p[1] * cos(theta)) + d_max
+
+		if (d >= d_max * 2) : continue
+
+		feature_space[i, d] += 1
+	return feature_space
+
+# builds a line from d, theta where the line is
+# d = sin(theta) * x + cos(theta) * y
+def build_line_polar(theta, d, shape = (100, 100), val = 1):
+	img = np.zeros(shape)
+	for x in range(shape[0]):
+		y = int((d - x * cos(theta)) / sin(theta))
+		if isnan(y):
+			print "########", theta, d, x
+			continue
+		if y < 0 or y >= shape[1] : continue
+		print y, x
+		img[y,x] = val
+	return img
+
+def coord_to_polar(coord, hough_space):
+	space = np.linspace(0, pi, len(hough_space))
+	theta = space[coord[0]]
+	d = coord[1] - len(hough_space[0]) / 2
+	return theta, d
+
+# this is cartesian
+def build_line(shape, m, b, val = 99):
+	im = np.zeros(shape)
+	for x in range(shape[1]):
+		point_y = int(m * x + b)
+		if point_y < 0 or point_y >= shape[0] : continue
+
+		im[point_y][x] = val
+	return im
+
+
+# this is cartesian
 def space_point_to_line(p, feature_space, M_MAX = 20, B_COEFF = 0.1):
 	space = np.linspace(- M_MAX, M_MAX, len(feature_space))
 	m = space[p[0]]
@@ -39,18 +94,8 @@ def get_coordinates(feature_space, val):
 	coords = np.where(feature_space == val)
 
 	for i in range(len(coords[0])):
-
 		points.append((coords[0][i], coords[1][i]))
 	return points
-
-def build_line(shape, m, b, val = 99):
-	im = np.zeros(shape)
-	for x in range(shape[1]):
-		point_y = int(m * x + b)
-		if point_y < 0 or point_y >= shape[0] : continue
-
-		im[point_y][x] = val
-	return im
 
 
 def run():

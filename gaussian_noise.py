@@ -56,7 +56,7 @@ def unsharp_filter(n = 10, b = 1, c = 2):
 
 
 FNAME1 = 'cat1.jpg'
-FNAME2 = 'cat2.jpg'
+FNAME2 = 'solidYellowCurve2.jpg'
 W = 500
 H = 200
 
@@ -69,10 +69,23 @@ img2 = misc.imresize(img2, (H, W))
 #im = gnoise(img1, sigma = 0)
 
 my_filter = np.array([[1,1,1,1,1],
-					[1,2,2,2,1],
-					[1,2,5,2,1],
-					[1,2,2,2,1],
+					[1,1,1,1,1],
+					[1,1,1,1,1],
+					[1,1,1,1,1],
 					[1,1,1,1,1]])
+
+im = signal.correlate(img2, my_filter)
+plt.subplot(2,1,1)
+plt.imshow(img2)
+plt.subplot(2,1,2)
+plt.imshow(im)
+plt.show()
+exit()
+
+
+
+
+
 
 my_filter_gaussian = gaussian_dist(0, 1, 10)
 my_unsharp_filter =  unsharp_filter(3, 1, 2.5)
